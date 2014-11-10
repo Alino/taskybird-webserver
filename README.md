@@ -13,4 +13,5 @@ Currently in development - there is no working release yet.
 
 ##Thunderbird extension
 If you are looking for the source code of the taskybird extension for thunderbird, it's on google code - https://code.google.com/p/taskybird/source/checkout
+
 Credit goes to Axel Grude for this extension.
