@@ -1,3 +1,4 @@
+var Email    = require('../models/email');
 var express    = require('express'); 		// call express
 var router = express.Router(); 				// get an instance of the express Router
 // on routes that end in /emails
@@ -16,7 +17,7 @@ router.route('/emails')
                 res.send(err);
             message = 'Email ' + email.name + ' created!';
             console.log(message);
-            io.emit('chat message', message);
+          //  io.emit('chat message', message);
             res.json({ message: message });
         });
 
@@ -62,7 +63,7 @@ router.route('/emails/:email_id')
                     res.send(err);
                 message = 'Email ' + email.name + ' updated!';
                 console.log(message);
-                io.emit('chat message', message);
+         //       io.emit('chat message', message);
                 res.json({ message: 'Email updated!' });
             });
 
@@ -80,3 +81,5 @@ router.route('/emails/:email_id')
             res.json({ message: 'Successfully deleted' });
         });
     });
+
+module.exports = router;

@@ -1,8 +1,10 @@
-var express    = require('express'); 		// call express
-var router = express.Router(); 				// get an instance of the express Router
+var User    = require('../models/user');
+var express = require('express'); 		// call express
+var router  = express.Router(); 		// get an instance of the express Router
 // on routes that end in /users
 // ----------------------------------------------------
 router.route('/users')
+
 
 // create a user (accessed at POST http://localhost:3000/api/users)
     .post(function(req, res) {
@@ -16,7 +18,7 @@ router.route('/users')
                 res.send(err);
             message = 'User ' + user.name + ' created!';
             console.log(message);
-            io.emit('chat message', message);
+            //io.emit('chat message', message);
             res.json({ message: message });
         });
 
@@ -62,7 +64,7 @@ router.route('/users/:user_id')
                     res.send(err);
                 message = 'User ' + user.name + ' updated!';
                 console.log(message);
-                io.emit('chat message', message);
+                //io.emit('chat message', message);
                 res.json({ message: 'User updated!' });
             });
 
@@ -80,3 +82,5 @@ router.route('/users/:user_id')
             res.json({ message: 'Successfully deleted' });
         });
     });
+
+module.exports = router;
