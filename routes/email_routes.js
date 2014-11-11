@@ -10,6 +10,12 @@ router.route('/emails')
 
         var email = new Email(); 		// create a new instance of the email model
         email.name = req.body.name;  // set the emails name (comes from the request)
+        email.message_id = req.body.message_id;
+        email.responsible_user_id = req.body.responsible_user_id;
+        email.status = req.body.status;
+        email.assigned_by = req.body.assigned_by;
+        email.date_created = req.body.date_created;
+        email.date_updated = Date.now();
 
         // save the email and check for errors
         email.save(function(err) {
@@ -56,6 +62,11 @@ router.route('/emails/:email_id')
                 res.send(err);
 
             email.name = req.body.name; 	// update the emails info
+            email.message_id = req.body.message_id;
+            email.responsible_user_id = req.body.responsible_user_id;
+            email.status = req.body.status;
+            email.assigned_by = req.body.assigned_by;
+            email.date_updated = Date.now();
 
             // save the email
             email.save(function(err) {

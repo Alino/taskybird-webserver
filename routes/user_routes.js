@@ -11,6 +11,8 @@ router.route('/users')
 
         var user = new User(); 		// create a new instance of the user model
         user.name = req.body.name;  // set the users name (comes from the request)
+        user.inactive = req.body.inactive;
+        user.admin = req.body.admin;
 
         // save the user and check for errors
         user.save(function(err) {
@@ -57,6 +59,8 @@ router.route('/users/:user_id')
                 res.send(err);
 
             user.name = req.body.name; 	// update the users info
+            user.inactive = req.body.inactive;
+            user.admin = req.body.admin;
 
             // save the user
             user.save(function(err) {
