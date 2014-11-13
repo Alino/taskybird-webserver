@@ -3,11 +3,12 @@
 
 // call the packages we need
 var express    = require('express'); 		// call express
-var app        = express(); 				// define our app using express
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var bodyParser = require('body-parser');
 var mongoose   = require('mongoose');
+
+var app        = express(); 				// define our app using express
 mongoose.connect('mongodb://localhost:27017'); // connect to our database
 var port = process.env.PORT || 3000;
 
