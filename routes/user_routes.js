@@ -13,7 +13,7 @@ router.route('/users')
         user.name = req.body.name;  // set the users name (comes from the request)
         user.inactive = req.body.inactive;
         user.admin = req.body.admin;
-
+        console.log(user);
         // save the user and check for errors
         user.save(function(err) {
             if (err)

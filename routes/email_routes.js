@@ -1,6 +1,6 @@
 var Email    = require('../models/email');
-var express    = require('express'); 		// call express
-var router = express.Router(); 				// get an instance of the express Router
+var express  = require('express'); 		// call express
+var router = express.Router(); 		    // get an instance of the express Router
 // on routes that end in /emails
 // ----------------------------------------------------
 router.route('/emails')
@@ -9,19 +9,19 @@ router.route('/emails')
     .post(function(req, res) {
 
         var email = new Email(); 		// create a new instance of the email model
-        email.name = req.body.name;  // set the emails name (comes from the request)
-        email.message_id = req.body.message_id;
+        email._id = req.body._id;
         email.responsible_user_id = req.body.responsible_user_id;
         email.status = req.body.status;
         email.assigned_by = req.body.assigned_by;
         email.date_created = req.body.date_created;
         email.date_updated = Date.now();
+        console.log(email);
 
         // save the email and check for errors
         email.save(function(err) {
             if (err)
                 res.send(err);
-            message = 'Email ' + email.name + ' created!';
+            message = 'Email ' + email._id + ' created!';
             console.log(message);
           //  io.emit('chat message', message);
             res.json({ message: message });
@@ -61,8 +61,7 @@ router.route('/emails/:email_id')
             if (err)
                 res.send(err);
 
-            email.name = req.body.name; 	// update the emails info
-            email.message_id = req.body.message_id;
+            email._id = req.body._id;
             email.responsible_user_id = req.body.responsible_user_id;
             email.status = req.body.status;
             email.assigned_by = req.body.assigned_by;
@@ -72,7 +71,7 @@ router.route('/emails/:email_id')
             email.save(function(err) {
                 if (err)
                     res.send(err);
-                message = 'Email ' + email.name + ' updated!';
+                message = 'Email ' + email._id + ' updated!';
                 console.log(message);
          //       io.emit('chat message', message);
                 res.json({ message: 'Email updated!' });

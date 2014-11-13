@@ -4,7 +4,7 @@ var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
 
 var EmailSchema   = new Schema({
-    message_id: String,
+    _id: {type: String, required: true},
     responsible_user_id: {type: Number},
     status: {type: Number, default: 0},
     assigned_by: {type: Number},
