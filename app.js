@@ -7,12 +7,38 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var bodyParser = require('body-parser');
 var mongoose   = require('mongoose');
+//var cookieParser = require('cookie-parser');
+//var session = require('express-session')
 
 var app        = express(); 				// define our app using express
 mongoose.connect('mongodb://localhost:27017'); // connect to our database
 var port = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
+
+// Other middleware
+//app.use(cookieParser('3DDD4ACD-6DE2-6458-4564-126484DBCD245'));
+//app.use(session({secret: '5D43663B-C451-3C55-9543-35E395EF945F'}));
+/*
+ app.use(function(req, res, next) {
+ if (req.session && req.session.admin)
+ res.locals.admin = true;
+ next();
+ });
+
+ // Authorization
+
+ var authorize = function(req, res, next) {
+ if (req.session && req.session.admin) {
+ return next();
+ } else {
+ return res.send(401);
+ }
+ };
+
+ app.get('/api', authorize);
+ */
+
 
 // ROUTES FOR OUR API
 // =============================================================================
@@ -61,8 +87,8 @@ io.on('connection', function(socket){
     });
 
     socket.on('chat message', function (data) {
-       console.log(data);
-       io.emit('chat message', data);
+        console.log(data);
+        io.emit('chat message', data);
     });
 
 });
