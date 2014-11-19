@@ -1,5 +1,7 @@
 var Email    = require('../models/email');
 var express  = require('express'); 		// call express
+var io = global.io;
+
 var router = express.Router(); 		    // get an instance of the express Router
 // on routes that end in /emails
 // ----------------------------------------------------
@@ -23,7 +25,9 @@ router.route('/emails')
                 res.send(err);
             message = 'Email ' + email._id + ' created!';
             console.log(message);
-          //  io.emit('chat message', message);
+
+            io.emit('chat message', message);
+
             res.json({ message: message });
         });
 
@@ -61,10 +65,10 @@ router.route('/emails/:email_id')
             if (err)
                 res.send(err);
 
-            email._id = req.body._id;
-            email.responsible_user_id = req.body.responsible_user_id;
-            email.status = req.body.status;
-            email.assigned_by = req.body.assigned_by;
+            if (req.body._id) email._id = req.body._id;
+            if (req.body.responsible_user_id) email.responsible_user_id = req.body.responsible_user_id;
+            if (req.body.status) email.status = req.body.status;
+            if (req.body.assigned_by) email.assigned_by = req.body.assigned_by;
             email.date_updated = Date.now();
 
             // save the email
@@ -73,7 +77,7 @@ router.route('/emails/:email_id')
                     res.send(err);
                 message = 'Email ' + email._id + ' updated!';
                 console.log(message);
-         //       io.emit('chat message', message);
+                io.emit('chat message', message);
                 res.json({ message: 'Email updated!' });
             });
 
