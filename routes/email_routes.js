@@ -25,8 +25,14 @@ router.route('/emails')
                 res.send(err);
             message = 'Email ' + email._id + ' created!';
             console.log(message);
-
-            io.emit('chat message', message);
+            data = {
+                message: message,
+                messageId: email._id,
+                responsible_user_id: email.responsible_user_id,
+                status: email.status,
+                assigned_by: email.assigned_by
+            };
+            io.emit('emailCreate', data);
 
             res.json({ message: message });
         });
@@ -77,7 +83,14 @@ router.route('/emails/:email_id')
                     res.send(err);
                 message = 'Email ' + email._id + ' updated!';
                 console.log(message);
-                io.emit('chat message', message);
+                data = {
+                    message: message,
+                    messageId: email._id,
+                    responsible_user_id: email.responsible_user_id,
+                    status: email.status,
+                    assigned_by: email.assigned_by
+                };
+                io.emit('emailUpdate', data);
                 res.json({ message: 'Email updated!' });
             });
 

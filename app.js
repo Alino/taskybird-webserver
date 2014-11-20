@@ -65,9 +65,14 @@ io.on('connection', function(socket){
         //io.emit('chat message', msg);
     });
 
-    socket.on('chat message', function (data) {
+    socket.on('emailCreate', function (data) {
         console.log(data);
-        io.emit('chat message', data);
+        io.emit('emailCreate', data);
+    });
+
+    socket.on('emailUpdate', function (data) {
+        console.log(data);
+        io.emit('emailUpdate', data);
     });
 
 });
