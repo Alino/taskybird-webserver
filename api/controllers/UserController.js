@@ -94,7 +94,16 @@ module.exports = {
             if (err) return next(err);
             if (!user) return next('User doesn\'t exist.');
 
-            res.view({
+
+            User.publishUpdate(user.id, {
+                name: user.name,
+                title: user.title,
+                email: user.email,
+                admin: user.admin,
+                action: ' has been updated.'
+            });
+
+                    res.view({
                 user: user
             });
         });
@@ -163,10 +172,10 @@ module.exports = {
             if (err) return next(err);
 
             // subscribe this socket to the User model classroom
-            User.subscribe(req.socket);
+            User.watch(req.socket);
 
             // subscribe this socket to the user instance rooms
-            User.subscribe(req.socket, users);
+            User.subscribe(req.socket, users, ['create', 'update', 'destroy']);
 
             // This will avoid a warning from the socket for trying to render
             // html over the socket.

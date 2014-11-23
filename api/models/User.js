@@ -28,11 +28,6 @@ module.exports = {
             unique: true
         },
 
-        admin: {
-            type: 'boolean',
-            defaultsTo: false
-        },
-
         encryptedPassword: {
             type: 'string'
         },
@@ -58,7 +53,7 @@ module.exports = {
     },
 
 
-    beforeValidation: function (values, next) {
+    beforeValidate: function (values, next) {
         console.log(values);
         if (typeof values.admin !== 'undefined') {
             if (values.admin === 'unchecked') {

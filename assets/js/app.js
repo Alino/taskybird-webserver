@@ -21,7 +21,7 @@
         console.log("This is from the connect: ", this.socket.sessionid);
 
         // Listen for the socket 'message'
-        socket.on('message', cometMessageReceivedFromServer);
+        socket.on('user', cometMessageReceivedFromServer);
 
         // Subscribe to the user model classroom and instance room
         socket.get('/user/subscribe');
@@ -70,15 +70,14 @@ function cometMessageReceivedFromServer(message) {
 
     // Okay, I need to route this message to the appropriate place.
 
-    // This message has to do with the User Model
-    if (message.model === 'user') {
+
         var userId = message.id
         updateUserInDom(userId, message);
 
-        if(message.verb !== "destroy") {
+        if(message.verb !== "destroyed") {
             displayFlashActivity(message);
         }
-    }
+
 }
 
 function displayFlashActivity(message) {
@@ -102,16 +101,16 @@ function updateUserInDom(userId, message) {
         case '/user':
 
             // This is a message coming from publishUpdate
-            if (message.verb === 'update') {
+            if (message.verb === 'updated') {
                 UserIndexPage.updateUser(userId, message);
             }
 
             // This is a message coming from publishCreate
-            if(message.verb === 'create') {
+            if(message.verb === 'created') {
                 UserIndexPage.addUser(message);
             }
             // This is a message coming publishDestroy
-            if(message.verb === 'destroy') {
+            if(message.verb === 'destroyed') {
                 UserIndexPage.destroyUser(userId);
             }
             break;
