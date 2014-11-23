@@ -26,16 +26,22 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
-    '*': 'flash',
+    '*': true,
 
-    user: {
-        'new': "flash",
-        subscribe: ["flash", "authenticated"],
-        create: "flash",
-        show: "userCanSeeProfile",
-        edit: "userCanSeeProfile",
-        update: "userCanSeeProfile",
-        '*': "admin"
+    'UserController': {
+        'add': ['tokenAuth', 'ownAssociations'],
+        'create': true,
+        'findOne': ['tokenAuth', 'ownUser'],
+        'populate': ['tokenAuth', 'ownAssociations'],
+        'remove': ['tokenAuth', 'ownAssociations'],
+        '*': false
+    },
+
+    'EmailController': {
+        'findOne': 'tokenAuth',
+        'create': 'tokenAuth',
+        'update': 'tokenAuth',
+        '*': true
     }
 
   /***************************************************************************

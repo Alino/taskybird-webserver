@@ -5,7 +5,7 @@
  * @description :: A short summary of how this model works and what it represents.
  *
  */
-
+var bcrypt = require('bcrypt');
 module.exports = {
 
     schema: true,
@@ -46,13 +46,12 @@ module.exports = {
             delete obj.password;
             delete obj.confirmation;
             delete obj.encryptedPassword;
-            delete obj._csrf;
             return obj;
         }
 
     },
 
-
+/*
     beforeValidate: function (values, next) {
         console.log(values);
         if (typeof values.admin !== 'undefined') {
@@ -65,6 +64,7 @@ module.exports = {
         }
         next();
     },
+*/
 
     beforeCreate: function (values, next) {
 
@@ -78,6 +78,18 @@ module.exports = {
             values.encryptedPassword = encryptedPassword;
             // values.online= true;
             next();
+        });
+    },
+
+    validPassword: function(password, user, cb) {
+        bcrypt.compare(password, user.encryptedPassword, function(err, match) {
+            if (err) cb(err);
+
+            if (match) {
+                cb(null, true);
+            } else {
+                cb(err);
+            }
         });
     }
 

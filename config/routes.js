@@ -32,9 +32,15 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+
   '/': {
     view: 'static/index'
   },
+
+    'GET /email': 'EmailController.index',
+    'POST /email': 'EmailController.create',
+    'PUT /email': 'EmailController.update',
+
 
 
   /***************************************************************************

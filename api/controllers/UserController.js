@@ -94,16 +94,7 @@ module.exports = {
             if (err) return next(err);
             if (!user) return next('User doesn\'t exist.');
 
-
-            User.publishUpdate(user.id, {
-                name: user.name,
-                title: user.title,
-                email: user.email,
-                admin: user.admin,
-                action: ' has been updated.'
-            });
-
-                    res.view({
+            res.view({
                 user: user
             });
         });
@@ -165,6 +156,7 @@ module.exports = {
     // This action works with app.js socket.get('/user/subscribe') to
     // subscribe to the User model classroom and instances of the user
     // model
+    /*
     subscribe: function(req, res) {
 
         // Find all current users in the user model
@@ -175,12 +167,13 @@ module.exports = {
             User.watch(req.socket);
 
             // subscribe this socket to the user instance rooms
-            User.subscribe(req.socket, users, ['create', 'update', 'destroy']);
+            User.subscribe(req.socket, users);
 
             // This will avoid a warning from the socket for trying to render
             // html over the socket.
             res.send(200);
         });
     }
+    */
 
 };
