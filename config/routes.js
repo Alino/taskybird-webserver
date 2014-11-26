@@ -40,7 +40,12 @@ module.exports.routes = {
     'GET /email': 'EmailController.index',
     'POST /email': 'EmailController.create',
     'PUT /email': 'EmailController.update',
+    'DELETE /email': 'EmailController.delete',
 
+    'GET /user': 'UserController.index',
+    'POST /user': 'UserController.create',
+    'PUT /user': 'UserController.update',
+    'DELETE /user': 'UserController.delete',
 
 
   /***************************************************************************

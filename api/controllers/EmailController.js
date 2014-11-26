@@ -70,6 +70,22 @@ module.exports = {
 
         });
 
-    }
+    },
+
+    destroy: function(req, res, next) {
+
+        Email.findOne(req.param('id'), function foundEmail(err, email) {
+            if (err) return next(err);
+
+            if (!email) return next('Email doesn\'t exist.');
+
+            Email.destroy(req.param('id'), function emailDestroyed(err) {
+                if (err) return next(err);
+            });
+
+            //res.redirect('/email');
+
+        });
+    },
 	
 };

@@ -28,7 +28,7 @@ module.exports.policies = {
 
     '*': true,
 
-    'UserController': {
+    'UserController': { // TODO - think about this - how a user should be created
         'add': ['tokenAuth', 'ownAssociations'],
         'create': true,
         'findOne': ['tokenAuth', 'ownUser'],
@@ -38,6 +38,7 @@ module.exports.policies = {
     },
 
     'EmailController': {
+        'find': 'tokenAuth',
         'findOne': 'tokenAuth',
         'create': 'tokenAuth',
         'update': 'tokenAuth',
