@@ -1,78 +1,59 @@
-// BASE SETUP
-// =============================================================================
+/**
+ * app.js
+ *
+ * Use `app.js` to run your app without `sails lift`.
+ * To start the server, run: `node app.js`.
+ *
+ * This is handy in situations where the sails CLI is not relevant or useful.
+ *
+ * For example:
+ *   => `node app.js`
+ *   => `forever start app.js`
+ *   => `node debug app.js`
+ *   => `modulus deploy`
+ *   => `heroku scale`
+ *
+ *
+ * The same command-line arguments are supported, e.g.:
+ * `node app.js --silent --port=80 --prod`
+ */
 
-// call the packages we need
-var express    = require('express'); 		// call express
-var app        = express(); 				// define our app using express
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-    global.io = io;
-var bodyParser = require('body-parser');
-var mongoose   = require('mongoose');
+// Ensure we're in the project directory, so relative paths work as expected
+// no matter where we actually lift from.
+process.chdir(__dirname);
+
+// Ensure a "sails" can be located:
+(function() {
+  var sails;
+  try {
+    sails = require('sails');
+  } catch (e) {
+    console.error('To run an app using `node app.js`, you usually need to have a version of `sails` installed in the same directory as your app.');
+    console.error('To do that, run `npm install sails`');
+    console.error('');
+    console.error('Alternatively, if you have sails installed globally (i.e. you did `npm install -g sails`), you can use `sails lift`.');
+    console.error('When you run `sails lift`, your app will still use a local `./node_modules/sails` dependency if it exists,');
+    console.error('but if it doesn\'t, the app will run with the global sails instead!');
+    return;
+  }
+
+  // Try to get `rc` dependency
+  var rc;
+  try {
+    rc = require('rc');
+  } catch (e0) {
+    try {
+      rc = require('sails/node_modules/rc');
+    } catch (e1) {
+      console.error('Could not find dependency: `rc`.');
+      console.error('Your `.sailsrc` file(s) will be ignored.');
+      console.error('To resolve this, run:');
+      console.error('npm install rc --save');
+      rc = function () { return {}; };
+    }
+  }
 
 
-mongoose.connect('mongodb://localhost:27017'); // connect to our database
-var port = process.env.PORT || 3000;
-
-app.set('view engine', 'ejs');
-
-
-
-// ROUTES FOR OUR API
-// =============================================================================
-var router = express.Router(); 				// get an instance of the express Router
-var users = require('./routes/user_routes');
-var emails = require('./routes/email_routes');
-
-// middleware to use for all requests
-router.use(function(req, res, next) {
-    // do logging
-    console.log('Something is happening.');
-    next(); // make sure we go to the next routes and don't stop here
-});
-
-
-// test route to make sure everything is working (accessed at GET http://localhost:3000/api)
-router.get('/', function(req, res) {
-    res.render('default', {title: 'socket.io chat'});
-});
-
-// ----------------------------------------------------
-
-
-// REGISTER OUR ROUTES --------------------------------
-// all of our routes will be prefixed with /api
-app.use('/', router);
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
-app.use('/api', users);
-app.use('/api', emails);
-
-
-
-// START THE SERVER
-// =============================================================================
-http.listen(3000, function(){
-    console.log('Magic is happening on *:3000');
-});
-
-io.on('connection', function(socket){
-    console.log('new client');
-
-    socket.on('my other event', function(data){
-        console.log("client " + data.client + " succesfully recieved message " + data.msg);
-        //console.log(data);
-        //io.emit('chat message', msg);
-    });
-
-    socket.on('emailCreate', function (data) {
-        console.log(data);
-        io.emit('emailCreate', data);
-    });
-
-    socket.on('emailUpdate', function (data) {
-        console.log(data);
-        io.emit('emailUpdate', data);
-    });
-
-});
+  // Start server
+  sails.lift(rc('sails'));
+})();

@@ -1,7 +1,7 @@
 taskybird-webserver
 ===================
 
-This is a task flow server which sends websockets to thunderbird clients.
+This is a task flow API server which sends websockets to thunderbird clients.
 Currently in development - there is no working release yet.
 
 ##Installation:
@@ -10,6 +10,8 @@ Currently in development - there is no working release yet.
 `cd taskybird-webserver`
 
 `npm install`
+
+`sails lift`
 
 ##Thunderbird extension
 If you are looking for the source code of the taskybird extension for thunderbird, it's on google code - https://code.google.com/p/taskybird/source/checkout
