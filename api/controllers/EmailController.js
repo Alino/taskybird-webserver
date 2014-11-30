@@ -11,8 +11,10 @@ module.exports = {
     index: function(req, res, next) {
         if (req.param('id')) {
             Email.findOne(req.param('id'), function foundEmail(err, email) {
-                if (err) return next(err);
-                if (!email) return next();
+                if (err) return res.serverError(err);
+                if (!email) return res.notFound();
+                console.log(err);
+                console.log(email);
                 return res.json({email: email});
             });
         } else {
@@ -29,7 +31,7 @@ module.exports = {
             _id: req.param('_id'),
             responsible_user_id: req.param('responsible_user_id'),
             status: req.param('status'),
-            assigned_by: req.token.uid
+            assigned_by: req.param('assigned_by'),
         }
 
 

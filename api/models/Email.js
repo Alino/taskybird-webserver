@@ -10,9 +10,9 @@ module.exports = {
     schema: true,
 
   attributes: {
-      _id: {type: 'string', required: true},
-      responsible_user_id: {type: 'string'},
-      status: {type: 'string', defaultsTo: 0},
-      assigned_by: {type: 'string'}
+      _id: {type: 'string', required: true, primaryKey: true},
+      responsible_user_id: {type: 'integer'},
+      status: {type: 'integer', defaultsTo: 0},
+      assigned_by: {type: 'integer'}
   }
 };
