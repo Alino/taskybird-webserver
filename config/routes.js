@@ -37,15 +37,17 @@ module.exports.routes = {
     view: 'static/index'
   },
 
-    'GET /email': 'EmailController.index',
-    'POST /email': 'EmailController.create',
-    'PUT /email': 'EmailController.update',
-    'DELETE /email': 'EmailController.delete',
-
     'GET /user': 'UserController.index',
     'POST /user': 'UserController.create',
     'PUT /user': 'UserController.update',
-    'DELETE /user': 'UserController.delete',
+    'DELETE /user': 'UserController.destroy',
+
+    'GET /email': 'EmailController.index',
+    'POST /email': 'EmailController.create',
+    'PUT /email': 'EmailController.update',
+    'DELETE /email': 'EmailController.destroy',
+
+    'GET /team': 'TeamController.index',
 
 
   /***************************************************************************

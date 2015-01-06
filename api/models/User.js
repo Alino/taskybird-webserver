@@ -41,6 +41,10 @@ module.exports = {
             defaultsTo: false
         },
 
+        team_id: {
+            type: 'integer',
+        },
+
         toJSON: function() {
             var obj = this.toObject();
             delete obj.password;

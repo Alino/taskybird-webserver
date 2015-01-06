@@ -24,12 +24,22 @@ module.exports = {
         }
     },
 
+    getEmailsNewerThanTimestamp: function(req, res, next) {
+        var timestamp = req.param('id');
+        if (timestamp) {
+            Email.find({createdAt: { '>': timestamp }}, function foundEmails(err, emails) {
+                if (err) return next(err);
+                return res.json({emails: emails});
+            });
+        }
+    },
+
     create: function(req, res, next) {
         var emailObj = {
             _id: req.param('_id'),
-            responsible_user_id: req.param('responsible_user_id'),
-            status: req.param('status'),
-            assigned_by: req.token.uid
+            responsible_user_id: req.param('responsible_user_id') || req.token.sid,
+            status: req.param('status') || 2,
+            assigned_by: req.token.sid
         }
 
 
@@ -52,12 +62,11 @@ module.exports = {
         Email.findOne(req.param('id'), function foundEmail(err, currentEmail) {
             if (err) return next(err);
             if (!currentEmail) return next();
-
             var emailObj = {
                 _id: req.param('_id'),
                 responsible_user_id: req.param('responsible_user_id') || currentEmail.responsible_user_id,
                 status: req.param('status') || currentEmail.status,
-                assigned_by: req.param('assigned_by') || currentEmail.assigned_by
+                assigned_by: req.param('responsible_user_id') ? req.token.sid : currentEmail.assigned_by
             }
 
             Email.update(req.param('id'), emailObj, function emailUpdated(err, email) {
