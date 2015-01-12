@@ -32,7 +32,7 @@ module.exports = {
     getEmailsNewerThanTimestamp: function(req, res, next) {
         var timestamp = req.param('id');
         if (timestamp) {
-            Email.find({createdAt: { '>': timestamp }}, function foundEmails(err, emails) {
+            Email.find({updatedAt: { '>': timestamp }}, function foundEmails(err, emails) {
                 if (err) return next(err);
                 return res.json({emails: emails});
             });
