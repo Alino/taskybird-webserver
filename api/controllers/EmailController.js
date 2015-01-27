@@ -72,6 +72,11 @@ module.exports = {
         Email.findOne(req.param('id'), function foundEmail(err, currentEmail) {
             if (err) return next(err);
             if (!currentEmail) return next();
+            if (currentEmail.status == 10) {
+                console.log('status is 10 so setting assigner an responsible to zero');
+                currentEmail.responsible_user_id = 0;
+                currentEmail.assigned_by = 0;
+            }
             var emailObj = {
                 _id: req.param('_id'),
                 responsible_user_id: req.param('responsible_user_id') || currentEmail.responsible_user_id,
@@ -83,11 +88,17 @@ module.exports = {
                 if (err) {
                     return res.json({err: err});
                 }
-                Email.publishUpdate(email[0]._id, {responsible_user_id: email[0].responsible_user_id, status: email[0].status, assigned_by: email[0].assigned_by, createdAt: email[0].createdAt, updatedAt: email[0].updatedAtd} );
+                var assigned_by = email[0].assigned_by;
+                var responsible_user_id = email[0].responsible_user_id;
+                if (email[0].status == 10) {
+                    assigned_by = 0;
+                    responsible_user_id = 0;
+                }
+                Email.publishUpdate(email[0]._id, {responsible_user_id: responsible_user_id, status: email[0].status, assigned_by: assigned_by, createdAt: email[0].createdAt, updatedAt: email[0].updatedAtd} );
 //                sails.sockets.blast('email', {responsible_user_id: email[0].responsible_user_id, status: email[0].status, assigned_by: email[0].assigned_by});
                 var socket = req.socket;
                 var io = sails.io;
-                io.sockets.emit('email', {_id: email[0]._id, responsible_user_id: email[0].responsible_user_id, status: email[0].status, assigned_by: email[0].assigned_by});
+                io.sockets.emit('email', {_id: email[0]._id, responsible_user_id: responsible_user_id, status: email[0].status, assigned_by: assigned_by});
                 console.log('Email with messageId '+req.param('id')+' has been updated');
                 return res.json({email: email});
             });

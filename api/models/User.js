@@ -45,6 +45,10 @@ module.exports = {
             type: 'integer',
         },
 
+        user:{
+            model: "user"
+        },
+
         toJSON: function() {
             var obj = this.toObject();
             delete obj.password;

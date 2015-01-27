@@ -49,6 +49,8 @@ module.exports.routes = {
 
     'GET /team': 'TeamController.index',
 
+    'GET /time': 'TimeController.index',
+
 
   /***************************************************************************
   *                                                                          *

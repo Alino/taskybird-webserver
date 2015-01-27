@@ -13,6 +13,10 @@ module.exports = {
       _id: {type: 'string', required: true, primaryKey: true},
       responsible_user_id: {type: 'string'},
       status: {type: 'string', defaultsTo: 0},
-      assigned_by: {type: 'string'}
+      assigned_by: {type: 'string'},
+      videos:{
+          collection: "user",
+          via: "email"
+      },
   }
 };
