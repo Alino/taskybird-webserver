@@ -31,10 +31,12 @@ module.exports.policies = {
     'UserController': { // TODO - think about this - how a user should be created
         'add': ['tokenAuth', 'ownAssociations'],
         'create': true,
-        'findOne': ['tokenAuth', 'ownUser'],
+        'findOne': 'tokenAuth',
+        'find': 'tokenAuth',
+        'foundUsers': 'tokenAuth',
         'populate': ['tokenAuth', 'ownAssociations'],
         'remove': ['tokenAuth', 'ownAssociations'],
-        '*': false
+        '*': true
     },
 
     'EmailController': {

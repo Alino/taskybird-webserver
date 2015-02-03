@@ -8,6 +8,7 @@
 module.exports = {
 
 
+
     index: function(req, res, next) {
         if (req.param('id')) {
             Email.findOne(req.param('id'), function foundEmail(err, email) {
@@ -24,14 +25,28 @@ module.exports = {
                 return res.json({emails: emails});
             });
         }
+        Email.find({}).exec(function(e,listOfEmails){
+            Email.watch(req);
+            Email.subscribe(req.socket,listOfEmails,['create','update']);
+        });
+    },
+
+    getEmailsNewerThanTimestamp: function(req, res, next) {
+        var timestamp = req.param('id');
+        if (timestamp) {
+            Email.find({updatedAt: { '>': timestamp }}, function foundEmails(err, emails) {
+                if (err) return next(err);
+                return res.json({emails: emails});
+            });
+        }
     },
 
     create: function(req, res, next) {
         var emailObj = {
             _id: req.param('_id'),
-            responsible_user_id: req.param('responsible_user_id'),
-            status: req.param('status'),
-            assigned_by: req.param('assigned_by'),
+            responsible_user_id: req.param('responsible_user_id') || req.token.sid,
+            status: req.param('status') || 2,
+            assigned_by: req.token.sid
         }
 
 
@@ -41,9 +56,14 @@ module.exports = {
                 return res.json({err: err});
             }
 
+            Email.publishCreate(email);
+            var socket = req.socket;
+            var io = sails.io;
+            io.sockets.emit('email', {_id: email._id, responsible_user_id: email.responsible_user_id, status: email.status, assigned_by: email.assigned_by, createdAt: email.createdAt, updatedAt: email.updatedAtd});
+            console.log('A new email with messageId '+email._id+' has been created');
+
             email.save(function(err, email) {
                 if (err) return next(err);
-
                 return res.json({email: email});
             });
         });
@@ -59,14 +79,22 @@ module.exports = {
                 _id: req.param('_id'),
                 responsible_user_id: req.param('responsible_user_id') || currentEmail.responsible_user_id,
                 status: req.param('status') || currentEmail.status,
-                assigned_by: req.param('assigned_by') || currentEmail.assigned_by
+                assigned_by: req.param('responsible_user_id') ? req.token.sid : currentEmail.assigned_by
             }
 
             Email.update(req.param('id'), emailObj, function emailUpdated(err, email) {
                 if (err) {
                     return res.json({err: err});
                 }
+                var assigned_by = email[0].assigned_by;
+                var responsible_user_id = email[0].responsible_user_id;
 
+                Email.publishUpdate(email[0]._id, {responsible_user_id: responsible_user_id, status: email[0].status, assigned_by: assigned_by, createdAt: email[0].createdAt, updatedAt: email[0].updatedAtd} );
+//                sails.sockets.blast('email', {responsible_user_id: email[0].responsible_user_id, status: email[0].status, assigned_by: email[0].assigned_by});
+                var socket = req.socket;
+                var io = sails.io;
+                io.sockets.emit('email', {_id: email[0]._id, responsible_user_id: responsible_user_id, status: email[0].status, assigned_by: assigned_by});
+                console.log('Email with messageId '+req.param('id')+' has been updated');
                 return res.json({email: email});
             });
 

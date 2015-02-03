@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>New Sails App</title>
+    <title>Taskybird</title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -90,5 +90,31 @@
     <!--SCRIPTS-->
     <script src="/js/dependencies/sails.io.js"></script>
     <!--SCRIPTS END-->
+
+    <script type="text/javascript">
+        window.onload = function subscribeAndListen(){
+            // When the document loads, send a request to email
+            // The controller code will subscribe you to all of the 'users' model instances (records)
+            io.socket.get('/email');
+            console.log(io.socket);
+
+            // Listen for the event called 'email'
+            io.socket.on('email',function(obj){
+//                console.log(obj);
+                if (obj.verb == 'updated' || obj.verb == 'created') {
+                    var data = obj.data;
+                    console.log(data);
+                }
+            });
+        };
+
+        function doEdit(){
+
+            // Send the name to the testSocket action on the 'Users' contoller
+
+            io.socket.get('/users/testSocket/',{name:'Walter'});
+        }
+
+    </script>
   </body>
 </html>

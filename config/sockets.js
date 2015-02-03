@@ -25,6 +25,10 @@ module.exports.sockets = {
 
     // By default, do nothing.
 
+      console.log('a user has connected');
+//      console.log(session);
+//      console.log(socket);
+
   },
 
 
@@ -37,6 +41,8 @@ module.exports.sockets = {
   onDisconnect: function(session, socket) {
 
     // By default: do nothing.
+
+      console.log('a user has disconnected from webserver');
   },
 
 
